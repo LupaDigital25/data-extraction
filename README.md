@@ -1,21 +1,27 @@
-# data-extraction
+# Data Extraction
 
-- newsurls.ipynb to extract inumerous news related links (around 3M) by using the variables.py links as base
+This repository is responsible for extracting and aggregating all raw data used in the main project.
 
-- extracts the news related links by using the cdx api from arquivo.pt
+![Pipeline Schema](assets/schema.svg)
 
-- saves all the links to data/urls.csv for further processing
+---
 
-- dataExtraction.py to extract the news from the links in data/urls.csv
+- `newsurls.ipynb`
 
-    - uses bloom filter to avoid duplicates
+Responsible for interacting with the Arquivo.pt CDX Server API to extract archived links related to various news sources, and store them in `data/urls.csv` for further processing.
 
-    - uses multiprocessing (spark) to speed up the process
+It extracted around 3M URLs.
 
-    - use bs4 to parse news contents
+- `dataExtraction.py`
 
-    - uses nlp to extract entities, sentiment, and other data
+Handles the processing of each stored URL using the following tools and techniques:
 
-    - processes the news in chuncks using checkpoints
+PySpark for parallel processing and scalability;
 
-    - saves the data into folders according to the news category in data/news/
+BeautifulSoup (bs4) for parsing the content of each URL;
+
+Bloom Filter to check for and avoid duplicates;
+
+Machine Learning Models to determine the relevance of the news content.
+
+The script stores the extracted news articles (at `data/news`) along with metadata such as: timestamp, source, sentiment analysis, and mentioned topics.

@@ -299,9 +299,11 @@ def update_checkpoint(status):
     with open(checkpoint_file, "w") as f:
         json.dump({"last_processed_status": status}, f)
 
-while True:
+while_loop = True
+while while_loop:
     i = get_last_processed_status() or -1
     df_selected = df.filter((df["id"] > i) & (df["id"] <= i + 5000)) #2400 10000 500 2500
+    while_loop = df_selected.count() > 0
 
     # Divide the DataFrame into chunks
     df_selected = df_selected.repartition(4) #4 22 4 4
@@ -325,3 +327,6 @@ while True:
     update_checkpoint(last_processed_status)
     print(f"Processed partition up to ID: {last_processed_status}. {datetime.now().strftime('%H:%M:%S')}")
     
+print("Processing completed.")
+spark.stop()
+print("Spark session stopped and everything is done :)")

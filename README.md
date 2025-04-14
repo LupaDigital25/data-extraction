@@ -1,27 +1,34 @@
 # Data Extraction
 
-This repository is responsible for extracting and aggregating all raw data used in the main project.
+This repository is responsible for extracting and aggregating all raw data used in the main project. It focuses on collecting, processing, and filtering news articles from archived web sources to support downstream machine learning tasks.
 
-![Pipeline Schema](assets/schema.svg)
+![Data Extraction Overview](assets/schema.svg)
 
 ---
+## Project Structure
 
-- `newsurls.ipynb`
+The repository is organized as follows:
 
-Responsible for interacting with the Arquivo.pt CDX Server API to extract archived links related to various news sources, and store them in `data/urls.csv` for further processing.
+- `newsUrls.ipynb`:
+  - Interacts with the Arquivo.pt CDX Server API to extract archived links related to various news sources.
+  - Stores the extracted URLs in `data/urls.csv` for further processing.
+  - Approximately 3 million URLs were extracted.
 
-It extracted around 3M URLs.
+- `dataExtraction.py`:
+  - Processes each stored URL using the following tools and techniques:
+    - **PySpark** for parallel processing and scalability.
+    - **BeautifulSoup (bs4)** for parsing the content of each URL.
+    - **Bloom Filter** to check for and avoid duplicates.
+    - **Machine Learning Models** to determine the relevance of the news content.
+  - Stores the extracted news articles in the `data/news` directory.
 
-- `dataExtraction.py`
+- `variables.py`:
+  - Includes links to news sources used to feed the API.
 
-Handles the processing of each stored URL using the following tools and techniques:
 
-PySpark for parallel processing and scalability;
+- `data/`:
+  - Directory containing the extracted URLs (`urls.csv`) and the processed news articles.
 
-BeautifulSoup (bs4) for parsing the content of each URL;
-
-Bloom Filter to check for and avoid duplicates;
-
-Machine Learning Models to determine the relevance of the news content.
-
-The script stores the extracted news articles (at `data/news`) along with metadata such as: timestamp, source, sentiment analysis, and mentioned topics.
+- `assets/`:
+  - Contains images and other assets related to the project.
+  - Also includes machine learning models used for classifying news content.
